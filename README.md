@@ -3,8 +3,6 @@
 A collection of hands-on machine learning projects focused on **model comparison, preprocessing, and real-world constraints**.  
 Built primarily using Jupyter notebooks.
 
-**Collaborators:** [Sasi Pawan](https://github.com/SasiPawan)
-
 ---
 
 ## Index
