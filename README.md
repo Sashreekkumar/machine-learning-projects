@@ -1,114 +1,119 @@
 # Machine Learning Playground
 
-This repository is a collection of ML Projects, built primarily using in *Jupyter notebooks**. The project is collabaration between [Sasi Pawan](https://github.com/SasiPawan) and I. 
+A collection of hands-on machine learning projects focused on **model comparison, preprocessing, and real-world constraints**.  
+Built primarily using Jupyter notebooks.
 
+**Collaborators:** [Sasi Pawan](https://github.com/SasiPawan)
+
+---
+
+## Index
+
+- [Project 1: Regression Models Comparison](#project-1-regression-models-comparison)
+- [Project 2: KNN on PIMA Diabetes Dataset](#project-2-knn-on-pima-diabetes-dataset)
+- [Project 3: GloVe Embeddings Visualization](#project-3-glove-embeddings-visualization)
+- [Project 4: XGBoost on Malaria Genomics](#project-4-xgboost-on-malaria-genomics)
+- [Tech Stack](#tech-stack)
+- [Notes](#notes)
 
 ---
 
 ## Project 1: Regression Models Comparison
 
-In this project, I built and compared multiple regression models within a unified pipeline to understand how different regularization techniques and optimization strategies affect performance. The goal was not just to implement models, but to systematically evaluate their behavior under consistent preprocessing and tuning conditions.
+Comparison of multiple regression techniques under a unified pipeline to study the impact of **regularization and optimization**.
 
-## What I Did:
+**Models:** Linear, Ridge, Lasso, Elastic Net, SGDRegressor, Polynomial  
 
-Implemented a range of regression models including Linear Regression, Ridge, Lasso, Elastic Net, SGDRegressor, and Polynomial Regression to cover both basic and regularized approaches.
+**Key Work:**
+- One-hot encoding + feature scaling (StandardScaler)
+- Unified training + evaluation pipeline
+- GridSearchCV for hyperparameter tuning
 
-Designed a consistent preprocessing pipeline where categorical variables were transformed using one-hot encoding, ensuring that models could handle non-numeric data effectively.
+**Insights:**
+- Ridge stabilizes multicollinearity; Lasso performs feature selection  
+- Elastic Net balances both worlds effectively  
+- Polynomial models overfit quickly without regularization 
 
-Applied feature scaling using StandardScaler so that models sensitive to feature magnitudes (especially regularized and gradient-based ones) perform optimally.
-
-Constructed evaluation functions to measure performance across multiple metrics, capturing both goodness-of-fit and error magnitudes.
-
-Trained each model under the same data conditions to ensure a fair comparison across different algorithms.
-
-Used GridSearchCV to systematically tune hyperparameters such as regularization strength, mixing ratios (for Elastic Net), and polynomial degrees.
-
-## Key Observations:
-
-Linear Regression performed well as a baseline but showed susceptibility to overfitting in the presence of multicollinearity and higher-dimensional feature spaces.
-
-Ridge Regression helped stabilize the model by shrinking coefficients, improving generalization especially when features were highly correlated.
-
-Lasso Regression introduced sparsity by driving some coefficients to zero, effectively performing implicit feature selection.
-
-Elastic Net balanced both L1 and L2 penalties, often performing better when neither pure Ridge nor pure Lasso was ideal.
-
-SGDRegressor demonstrated the importance of optimization strategy, particularly for larger datasets, though it required careful tuning of learning rates and regularization.
-
-Polynomial Regression increased model flexibility but also significantly increased the risk of overfitting, especially at higher degrees.
-
-## Takeaways:
-
-Regularization plays a critical role in controlling model complexity and improving generalization, particularly in real-world datasets with noise and correlated features.
-
-Different regression techniques are not strictly “better” or “worse”—their effectiveness depends heavily on the data distribution and feature relationships.
-
-A unified pipeline with consistent preprocessing and evaluation is essential for making meaningful comparisons between models.
-
-Hyperparameter tuning is not optional; it can drastically change model performance and often determines which model appears “best.”
+**Code:**
+[Regression_Pipeline_ipynb](Regression/Regression_Pipeline_ipynb.ipynb)
 
 ---
 
-## Project 2: K-Nearest Neighbors on PIMA Diabetes Dataset
+## Project 2: KNN on PIMA Diabetes Dataset
 
-In this mini-project, I implemented a K-Nearest Neighbors (KNN) classifier on the PIMA Diabetes dataset to predict whether a patient is diabetic or not. The primary goal was to build a robust preprocessing pipeline, handle missing/improper values intelligently, and evaluate how well a distance-based model performs on medical data.
+Built a KNN classifier with a focus on **data cleaning and imputation** for medical data.
 
-## What I Did:
+**Key Work:**
+- Handled invalid zero values using median + KNN imputation  
+- Scaled features for distance-based learning  
+- Train/val/test split with pipeline-based modeling  
 
-Loaded the dataset using KaggleHub and performed an initial inspection to understand feature distributions and anomalies.
+**Results:**
+- Accuracy: ~57%  
+- Strong class imbalance → poor recall for diabetic cases (~18%)
 
-Identified invalid zero values in medical attributes such as Glucose, Blood Pressure, BMI, Skin Thickness, and Insulin, and handled them using appropriate imputation strategies.
+**Insights:**
+- Preprocessing > model choice for KNN  
+- Distance-based models struggle on imbalanced datasets  
 
-Applied median imputation for features with fewer zero values (Glucose, BloodPressure, BMI) to preserve statistical robustness.
-
-Used a KNN-based imputation pipeline (with scaling) for features with a large number of missing values (SkinThickness, Insulin), allowing values to be inferred based on similarity across samples.
-
-Split the dataset into train, validation, and test sets to ensure proper evaluation and avoid data leakage.
-
-Built a pipeline combining StandardScaler and KNeighborsClassifier to ensure distance computations are meaningful across features with different scales.
-
-Trained the model with initial hyperparameters (k = 9, Euclidean distance, uniform weights) and evaluated it on validation data.
-
-Performed hyperparameter tuning using GridSearchCV over different values of k, distance metrics, and weighting strategies.
-
-## Key Observations:
-
-The dataset contains a significant number of zero values in features where zeros are not physiologically valid, making preprocessing a critical step for meaningful model performance.
-
-KNN imputation worked well for highly sparse features like Insulin and SkinThickness, as it leverages patterns from similar samples rather than relying on global statistics.
-
-Feature scaling had a strong impact on performance since KNN is distance-based and sensitive to magnitude differences across features.
-
-The model achieved moderate performance, with an accuracy of around 57% on evaluation, but showed a strong bias toward predicting the majority class (non-diabetic).
-
-The recall for diabetic patients was particularly low (~18%), indicating that the model struggles to correctly identify positive cases — a critical issue in medical diagnosis.
-
-Hyperparameter tuning showed the best configuration to be k = 9, Euclidean distance, and uniform weighting, achieving a cross-validation accuracy of ~76%, though this did not fully translate to strong generalization.
-
-## Takeaways:
-
-This project highlights that preprocessing and data quality often matter more than model complexity, especially for simple algorithms like KNN.
-
-While KNN is intuitive and easy to implement, it may not be the best choice for imbalanced medical datasets without additional techniques such as resampling or class weighting.
-
-Evaluation metrics beyond accuracy (like recall and F1-score) are essential in healthcare applications, where false negatives can have serious consequences.
+**Code:**
+[KNN.ipynb](KNN/KNN.ipynb)
 
 ---
 
-## Project 3: Dimensionality Reduction: GloVe Embeddings
-In this mini-project, I explored GloVe (Global Vectors for Word Representation) using the glove.6B.200d pre-trained embeddings. My objective was to analyze how semantic relationships between words are preserved when visualized using dimensionality reduction techniques.
+## Project 3: GloVe Embeddings Visualization
 
-## What I Did:
-Loaded 200-dimensional GloVe vectors and extracted embeddings for a carefully chosen set of overlapping words (e.g., apple, mango, computer).
+Explored semantic relationships in **GloVe word embeddings** using dimensionality reduction.
 
-Applied PCA followed by t-SNE to reduce dimensions to 2D for visualization.
+**Key Work:**
+- Used `glove.6B.200d` embeddings  
+- PCA → t-SNE (2D visualization)  
+- Tested multiple perplexity values (25–50)
 
-Plotted word vectors using different perplexity values (25, 30, 40, 45, 50) to observe how clustering behavior changes.
+**Insights:**
+- Semantic clustering visible at lower perplexities  
+- “apple” positioned between fruit + tech contexts  
+- Higher perplexity distorted semantic relationships  
 
-## Key Observations:
-At perplexity 25 and 30, the visualizations grouped semantically related words together meaningfully.
-Notably, the word apple appeared between mango and computer, effectively capturing its dual nature as both a fruit and a tech brand.
-
-At perplexity 40, the word apple shifted far from mango, indicating a loss in that semantic balance.
+**Code:**
+[glove-embeddings.ipynb](Dimensionality_Reduction/glove-embeddings.ipynb)
 
 ---
+
+## Project 4: XGBoost on Malaria Genomics
+
+Baseline classification model for **species prediction using SNP data (~48.5M features/sample)**.
+
+**Key Work:**
+- MAF filtering to remove uninformative variants  
+- 0/1/2 SNP encoding  
+- Sparse processing + `np.memmap` for memory efficiency  
+- TruncatedSVD for dimensionality reduction  
+- XGBoost classifier
+
+**Results:**
+- Accuracy: ~80%  
+- Macro F1: ~0.60  
+
+**Insights:**
+- Dimensionality reduction is critical in genomics  
+- XGBoost handles high-dimensional tabular data well  
+- Performance limited by class imbalance + missing classes  
+
+**Code Repository:**
+[XG Boost on Malaria Genomics](https://github.com/Sashreekkumar/malaria-gen/blob/main/README.md)
+
+---
+
+## Tech Stack
+
+`scikit-learn` • `numpy` • `pandas` • `matplotlib` • `XGBoost` • `PyTorch`
+
+---
+
+## Notes
+
+This repository focuses on **learning through implementation**, with emphasis on:
+- clean pipelines  
+- fair model comparison  
+- practical constraints (memory, data quality, imbalance)  
